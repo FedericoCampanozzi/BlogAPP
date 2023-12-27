@@ -1,5 +1,4 @@
 from django.db import models
+from db_connection import db
 
-class React(models.Model):
-    employee = models.CharField(max_length=30)
-    department = models.CharField(max_length=200)
+qry_col_post = db['post']

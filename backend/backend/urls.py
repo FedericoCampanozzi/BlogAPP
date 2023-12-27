@@ -20,5 +20,6 @@ from app.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', ReactView.as_view(), name="anything")
+    path('api/v1/post/add', addPost),
+    path('api/v1/post/get-all', getAll)
 ]
