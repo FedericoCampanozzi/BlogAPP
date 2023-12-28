@@ -4,7 +4,7 @@ const SharedStateContext = createContext();
 
 export const SharedStateProvider = ({ children }) => {
   const [userAuth, setUserAuth] = useState();
-  const [posts, setPosts] = useState();
+  const [posts, setPosts] = useState([]);
 
   return (
     <SharedStateContext.Provider

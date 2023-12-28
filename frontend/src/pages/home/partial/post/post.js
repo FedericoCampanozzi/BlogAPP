@@ -1,13 +1,21 @@
 import React from "react";
+import { Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
-import { Container, Row, Col } from "react-bootstrap";
+
 const PostCard = ({ post, isDetail }) => {
+  const navigate = useNavigate();
   return (
     <div>
-      <Button variant="info" onClick={() => navigate("/")}>
-        <FontAwesomeIcon icon={faChevronLeft} />
-      </Button>
+      {
+        isDetail ? (
+        <Button variant="info" onClick={() => navigate("/")}>
+          <FontAwesomeIcon icon={faChevronLeft} />
+        </Button>
+        ) : null
+      }
+      Title : { post.title }
     </div>
   );
 };

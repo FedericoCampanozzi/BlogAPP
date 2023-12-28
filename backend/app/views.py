@@ -1,10 +1,13 @@
-from django.shortcuts import render
 from django.http import HttpResponse
 from .models import *
+from .utils import ServerResponseHandler, REQUEST_TYPE
 
 # POST #
+def f_getAll(request):
+    return list(qry_col_post.find())
+
 def getAll(request):
-    return HttpResponse(qry_col_post.find())
+    return ServerResponseHandler(request, REQUEST_TYPE.GET, f_getAll)
 
 def getPost(request):
     idPost = request.id

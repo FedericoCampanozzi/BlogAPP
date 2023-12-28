@@ -1,13 +1,23 @@
-import React from "react";
+import { useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
+import { useSharedState } from "../../shared/state-context";
+import { getAllPostAPI } from '../../shared/api';
+import PostCard from "./partial/post/post";
 
 const Home = () => {
   const navigate = useNavigate();
+  const { posts, setPosts, userAuth } = useSharedState();
+  
+  useEffect(()=>{
+    getAllPostAPI(setPosts);
+  }, []);
+
   const routeAddPost = () => {
-    //navigate("/add-post");
-    navigate("/login");
+    if (userAuth != null ) navigate("/add-post");
+    else navigate("/login");
   };
+
   return (
     <>
       <div>
@@ -18,7 +28,17 @@ const Home = () => {
           Log In
         </Button>
         <h1>Home Page</h1>
-        <div></div>
+        <div>
+          {
+            posts?.map((post, index)=>{
+              return (
+                <div key={`p_${index}`}>
+                  <PostCard post={post} isDetail={false} />
+                </div>
+              )
+            })
+          }
+        </div>
         <div>
           <Button variant="info" onClick={() => routeAddPost()}>
             Add Post
