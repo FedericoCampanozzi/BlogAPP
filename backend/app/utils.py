@@ -26,7 +26,10 @@ def ServerResponseHandler(
     logger = logging.getLogger(__name__)
     try:
         if request.method == type.value:
-            data = body_function(request)
+            body = "{}"
+            if(type == REQUEST_TYPE.POST):
+                body = request.body
+            data = body_function(json.loads(body))
             response = {
                 "error": False,
                 "data": json.loads(dumps(data)),
