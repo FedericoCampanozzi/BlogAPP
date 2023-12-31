@@ -7,6 +7,18 @@
   pointer-events: none;
 }
 
+body {
+  background-color: #d6d6d6 !important;
+}
+
+.form-border {
+  border-radius: 20px;
+  border: 1px solid #000;
+  width: auto;
+  margin: 5%;
+  background-color: rgb(205, 205, 204);
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;

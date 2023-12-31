@@ -1,0 +1,23 @@
+.filter-container {
+    width: 20%;
+    background-color: aquamarine;
+    float: left;
+    height: 465px;
+}
+
+.posts-container {
+    width: 80%;
+    float: right;
+}
+
+.posts-scrollable {
+    background-color: blueviolet;
+    overflow-y: scroll;
+    height: 465px;
+    padding-left: 20px;
+}
+
+.btn-add-post {
+    margin: 20px 20px 0 0;
+    float: right;
+}

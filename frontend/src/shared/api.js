@@ -29,8 +29,28 @@ const loginAPI = async (username, password, setUserAuth) => {
     setUserAuth(user);
   });
 };
+const putUserAPI = async (
+  name,
+  surname,
+  dateOfBirthday,
+  username,
+  email,
+  password
+) => {
+  errorFlow(async () => {
+    await axios.put("/api/v1/user/put", {
+      "name" : name,
+      "surname" : surname,
+      "dateOfBirthday" : dateOfBirthday,
+      "username": username,
+      "email": email,
+      "password": password
+    });
+  });
+};
 
 export {
   getAllPostAPI,
-  loginAPI
+  loginAPI,
+  putUserAPI
 }

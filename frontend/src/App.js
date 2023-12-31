@@ -7,6 +7,7 @@ import Layout from "./layout";
 import Registration from "./pages/registration/registration";
 import Login from "./pages/login/login";
 import AddPost from "./pages/add-post/add-post";
+import PostDetail from "./pages/post-detail/post-detail";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path="/registration" element={<Registration />}></Route>
             <Route path="/login" element={<Login />}></Route>
             <Route path="/add-post" element={<AddPost />}></Route>
+            <Route path="/post-detail" element={<PostDetail />}></Route>
             <Route path="*" element={<NotFound />}></Route>
           </Route>
         </Routes>

@@ -21,10 +21,10 @@ from app.views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/post/get-all', getAll),
-    path('api/v1/post/get-post', getPost),
-    path('api/v1/post/put', putPost),
-    path('api/v1/post/update', updatePost),
-    path('api/v1/post/delete', deletePost),
+    #path('api/v1/post/get-post', getPost),
+    #path('api/v1/post/put', putPost),
+    #path('api/v1/post/update', updatePost),
+    #path('api/v1/post/delete', deletePost),
     path('api/v1/user/login', login),
     path('api/v1/user/put', putUser)
 ]
