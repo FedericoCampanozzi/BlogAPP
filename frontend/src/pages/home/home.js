@@ -34,7 +34,7 @@ const Home = () => {
             );
           })}
         </div>
-        <Button variant="info" className="btn-add-post" onClick={() => routeAddPost()}>
+        <Button variant="outline-dark" className="btn-add-post" onClick={() => routeAddPost()}>
           Add Post
         </Button>
       </div>

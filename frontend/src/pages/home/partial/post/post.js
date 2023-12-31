@@ -2,14 +2,18 @@ import React from "react";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, faHeart } from "@fortawesome/free-solid-svg-icons";
 import Card from 'react-bootstrap/Card';
 import './post.css';
 
 const PostCard = ({ post, isDetail }) => {
   const navigate = useNavigate();
   const goToDetail = () => {
-    navigate('/post-detail', { post });
+    navigate('/post-detail',  {
+      state: {
+        post
+      }
+    });
   };
 
   return (
@@ -42,9 +46,12 @@ const PostCard = ({ post, isDetail }) => {
         </Card.Text>
         {
           !isDetail ?(
-            <button onClick={goToDetail}> Detail </button>
+            <Button variant="outline-dark" onClick={goToDetail}> Detail </Button>
           ):null
         }
+        <div className="post-likes">
+          <FontAwesomeIcon icon={faHeart} /> 1500
+        </div>
       </Card.Body>
     </Card>
     </div>
