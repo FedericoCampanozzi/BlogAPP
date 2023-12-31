@@ -13,7 +13,6 @@ const getAllPostAPI = async (setPosts) => {
   errorFlow(async () => {
     const response = await axios.get("/api/v1/post/get-all");
     const posts = [...response.data['data']];
-    console.log("posts=",posts);
     setPosts(posts);
   });
 };
@@ -25,7 +24,7 @@ const loginAPI = async (username, password, setUserAuth) => {
       "username" : username,
       "password" : password
     });
-    const user = response.data;
+    const user = response.data['data'];
     setUserAuth(user);
   });
 };
@@ -34,15 +33,17 @@ const putUserAPI = async (
   surname,
   dateOfBirthday,
   username,
+  imageProfileUrl,
   email,
   password
 ) => {
   errorFlow(async () => {
-    await axios.put("/api/v1/user/put", {
+    await axios.post("/api/v1/user/put", {
       "name" : name,
       "surname" : surname,
       "dateOfBirthday" : dateOfBirthday,
       "username": username,
+      "url": imageProfileUrl,
       "email": email,
       "password": password
     });

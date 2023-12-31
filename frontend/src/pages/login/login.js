@@ -14,7 +14,7 @@ const Login = () => {
 
   const loginFunction = () => {
     loginAPI(username, password, setUserAuth);
-    //navigate("/");
+    navigate("/");
   };
   const handleTextChangeEvent = (event, setMethod) => {
     setMethod(event.target.value);
