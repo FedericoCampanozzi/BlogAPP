@@ -1,6 +1,5 @@
 .filter-container {
     width: 30%;
-    background-color: aquamarine;
     float: left;
     height: 465px;
     padding: 10px;
@@ -12,8 +11,7 @@
 }
 
 .posts-scrollable {
-    background-color: blueviolet;
-    overflow-y: scroll;
+    overflow-y: auto;
     height: 465px;
     padding-left: 20px;
 }
