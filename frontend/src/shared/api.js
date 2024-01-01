@@ -20,14 +20,16 @@ const putPostAPI = async (
   title,
   summary,
   text,
-  publisher
+  publisher,
+  topic
 ) => {
   errorFlow(async () => {
     await axios.post("/api/v1/post/put", {
       "title" : title,
       "summary": summary,
       "text" : text,
-      "publisher": publisher
+      "publisher": publisher,
+      "topic":topic
     });
   });
 };

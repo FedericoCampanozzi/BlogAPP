@@ -16,6 +16,7 @@ def PutPost(data):
       "summary": data['summary'],
       "text" : data['text'],
       "publisher": data['publisher'],
+      "topic": data['topic'],
       "likes": 0
     })
     return None

@@ -12,12 +12,13 @@ const AddPost = () => {
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
   const [text, setText] = useState("");
+  const [topic, setTopic] = useState("");
 
   const handleTextChangeEvent = (event, setMethod) => {
     setMethod(event.target.value);
   };
   const uploadPostFunction = () => {
-    putPostAPI(title, summary, text, userAuth);
+    putPostAPI(title, summary, text, userAuth, topic);
     navigate("/");
   };
   return (
@@ -36,7 +37,7 @@ const AddPost = () => {
         </div>
         <div className="py-2">
           <Form.Label>Topics</Form.Label>
-          <Form.Select>
+          <Form.Select onChange={(event)=>setTopic(event.target.value)}>
             {t.map((t_el) => {
               return <option value={t_el}>{t_el}</option>;
             })}
