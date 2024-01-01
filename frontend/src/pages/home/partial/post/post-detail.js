@@ -6,7 +6,6 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { Col, Container, Row } from "react-bootstrap";
 
 const PostCardDetail = ({ post }) => {
-  console.log("post=", post);
   return (
     <>
       <Card className="card-container">

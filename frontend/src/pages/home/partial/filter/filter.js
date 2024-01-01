@@ -1,20 +1,12 @@
 import React from "react";
 import Form from "react-bootstrap/Form";
 import { useSharedState } from "../../../../shared/state-context";
-
-const insert = (arr, index, ...newItems) => [
-  // part of the array before the specified index
-  ...arr.slice(0, index),
-  // inserted items
-  ...newItems,
-  // part of the array after the specified index
-  ...arr.slice(index),
-];
+import { insertItemArray } from "../../../../shared/utility-function";
 
 const PostsFilter = () => {
   const { topics } = useSharedState();
   let t = [...topics];
-  t = insert(t, 0, "ALL");
+  t = insertItemArray(t, 0, "ALL");
 
   const sortMethodChanged = () => {};
   const filteredDataChanged = () => {};

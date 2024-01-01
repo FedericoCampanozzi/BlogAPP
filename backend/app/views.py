@@ -1,6 +1,8 @@
+import random
 from .models import *
 from .utils import ServerResponseHandler, REQUEST_TYPE
 from datetime import datetime
+from bson.objectid import ObjectId
 
 # POST #
 def GetAllPost(data):
@@ -17,19 +19,26 @@ def PutPost(data):
       "text" : data['text'],
       "publisher": data['publisher'],
       "topic": data['topic'],
-      "likes": 0
+      "likes": random.randint(1000, 10000)
     })
     return None
 
 def putPost(request):
     return ServerResponseHandler(request, REQUEST_TYPE.POST, PutPost)
 
+def DeletePost(data):
+    qry_col_post.delete_one({
+        "_id" : ObjectId(data['id']['$oid'])
+    })
+
+def deletePost(request):
+    return ServerResponseHandler(request, REQUEST_TYPE.POST, DeletePost)
+
 # USER #
 def PutUser(data):
     url = 'https://img.freepik.com/vektoren-premium/mann-avatar-profilbild-vektor-illustration_268834-538.jpg'
     if(data['url'] != None):
         url = data['url']
-    print("url=",url)
     qry_col_user.insert_one({
       "name" : data['name'],
       "surname" : data['surname'],

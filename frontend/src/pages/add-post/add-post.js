@@ -12,7 +12,7 @@ const AddPost = () => {
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
   const [text, setText] = useState("");
-  const [topic, setTopic] = useState("");
+  const [topic, setTopic] = useState(t[0]);
 
   const handleTextChangeEvent = (event, setMethod) => {
     setMethod(event.target.value);
@@ -37,9 +37,9 @@ const AddPost = () => {
         </div>
         <div className="py-2">
           <Form.Label>Topics</Form.Label>
-          <Form.Select onChange={(event)=>setTopic(event.target.value)}>
-            {t.map((t_el) => {
-              return <option value={t_el}>{t_el}</option>;
+          <Form.Select onChange={(event) => handleTextChangeEvent(event, setTopic)}>
+            {t.map((t_el, index) => {
+              return <option key={index} value={t_el}>{t_el}</option>;
             })}
           </Form.Select>
         </div>
@@ -57,7 +57,7 @@ const AddPost = () => {
           />
         </div>
         <div className="py-2">
-          <Form.Label>Article</Form.Label>
+          <Form.Label>Text</Form.Label>
           <Form.Control
             style={{resize:"none"}}
             as={"textarea"}

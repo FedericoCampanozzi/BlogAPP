@@ -3,10 +3,10 @@ import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
 import { useSharedState } from "../../shared/state-context";
 import { getAllPostAPI, getAllTopicAPI } from "../../shared/api";
-import PostCard from "./partial/post/post";
 import Header from "./partial/header/header";
 import PostsFilter from "./partial/filter/filter";
 import "./home.css";
+import PostCardLayout from "./partial/post/post";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -38,7 +38,7 @@ const Home = () => {
           {posts?.map((post, index) => {
             return (
               <div key={`p_${index}`}>
-                <PostCard post={post} isDetail={false} />
+                <PostCardLayout type={"POST"} post={post} />
               </div>
             );
           })}

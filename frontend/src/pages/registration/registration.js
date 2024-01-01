@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
 import { useSharedState } from "../../shared/state-context";
 import { loginAPI, putUserAPI } from "../../shared/api";
+import {  handleTextChangeEvent, getFormattedDate } from "../../shared/utility-function";
 import "./registration.css";
+import { useNavigate } from "react-router-dom";
 
 const Registration = () => {
-  const navigate = useNavigate();
   const { setUserAuth } = useSharedState();
+  const navigate = useNavigate();
 
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
@@ -18,12 +19,6 @@ const Registration = () => {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
 
-  const getFormattedDate = (d) => {
-    return new Date(d).toISOString().split('T')[0];
-  }
-  const handleTextChangeEvent = (event, setMethod) => {
-    setMethod(event.target.value);
-  };
   const registerFunction = () => {
     if (password === passwordConfirm) {
       putUserAPI(
@@ -35,6 +30,8 @@ const Registration = () => {
         email,
         password
       );
+      // TO FIX :
+      // loginAPI retun null => have to log user
       loginAPI(username, password, setUserAuth);
       navigate("/");
     } else {

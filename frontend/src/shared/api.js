@@ -33,6 +33,14 @@ const putPostAPI = async (
     });
   });
 };
+const deleteAPI = async (id) => {
+  errorFlow(async () => {
+    console.log("id=", id);
+    await axios.post("/api/v1/post/delete", {
+      "id" : id
+    });
+  });
+};
 
 /* USER */
 const loginAPI = async (username, password, setUserAuth) => {
@@ -79,6 +87,7 @@ const getAllTopicAPI = async (setTopics) => {
 export {
   getAllPostAPI,
   putPostAPI,
+  deleteAPI,
   loginAPI,
   putUserAPI,
   getAllTopicAPI
