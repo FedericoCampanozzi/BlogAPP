@@ -16,6 +16,21 @@ const getAllPostAPI = async (setPosts) => {
     setPosts(posts);
   });
 };
+const putPostAPI = async (
+  title,
+  summary,
+  text,
+  publisher
+) => {
+  errorFlow(async () => {
+    await axios.post("/api/v1/post/put", {
+      "title" : title,
+      "summary": summary,
+      "text" : text,
+      "publisher": publisher
+    });
+  });
+};
 
 /* USER */
 const loginAPI = async (username, password, setUserAuth) => {
@@ -50,8 +65,19 @@ const putUserAPI = async (
   });
 };
 
+/* TOPIC */
+const getAllTopicAPI = async (setTopics) => {
+  errorFlow(async () => {
+    const response = await axios.get("/api/v1/topic/get-all");
+    const topics = [...response.data['data']];
+    setTopics(topics);
+  });
+};
+
 export {
   getAllPostAPI,
+  putPostAPI,
   loginAPI,
-  putUserAPI
+  putUserAPI,
+  getAllTopicAPI
 }

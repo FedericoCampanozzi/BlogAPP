@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
 import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,13 +8,16 @@ import { loginAPI } from "../../shared/api";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { state } = useLocation();
+  const { fromAddPost } = state;
   const { setUserAuth } = useSharedState();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const loginFunction = () => {
     loginAPI(username, password, setUserAuth);
-    navigate("/");
+    if(fromAddPost !== undefined && fromAddPost) navigate("/add-post");
+    else navigate("/");
   };
   const handleTextChangeEvent = (event, setMethod) => {
     setMethod(event.target.value);

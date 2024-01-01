@@ -5,12 +5,22 @@ import React from "react";
 import "./header.css";
 import { useSharedState } from "../../../../shared/state-context";
 import { Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const navigate = useNavigate();
   const { userAuth, setUserAuth } = useSharedState();
   const logout = () => {
     setUserAuth(null);
   };
+  const login = () => {
+    const fromAddPost = false;
+    navigate("/login", {
+      state: {
+        fromAddPost
+      }
+    });
+  }
   return (
     <Navbar bg="dark" data-bs-theme="dark">
       <Container>
@@ -18,12 +28,12 @@ const Header = () => {
         <Nav className="me-auto">
         {userAuth === undefined || userAuth === null ? (
           <>
-            <Nav.Link href="login" className="to-left">
+            <Button variant="outline-light" onClick={login}>
               Log In
-            </Nav.Link>
-            <Nav.Link href="registration" className="to-left">
+            </Button>
+            <Button variant="outline-light" onClick={ () => {navigate("/registration")} }>
               Registration
-            </Nav.Link>
+            </Button>
           </>
         ) : (
           <>
