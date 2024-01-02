@@ -1,4 +1,5 @@
 import random
+import pymongo
 from .models import *
 from .utils import ServerResponseHandler, REQUEST_TYPE
 from datetime import datetime
@@ -6,10 +7,41 @@ from bson.objectid import ObjectId
 
 # POST #
 def GetAllPost(data):
-    return list(qry_col_post.find())
+    date_format= "%Y-%m-%d"
+    sortPresetIndex = int(data['sortPresetIndex'])
+    sortField = ""
+    sortDirection = pymongo.ASCENDING
+    dLower = datetime.strptime(data['dateFrom'], date_format)
+    dUpper = datetime.strptime(data['dateTo'], date_format)
+    find = {}
+
+    if (data['selTopic'] == "ALL"):
+        find = {"dateCreation" : {"$gte": dLower, "$lte": dUpper}}
+    else :
+        find = {
+            "dateCreation" : {"$gte": dLower, "$lte": dUpper},
+            "topic" : data['selTopic']
+        }
+
+    if(sortPresetIndex == 1):
+        sortField = "likes"
+        sortDirection = pymongo.DESCENDING
+    elif(sortPresetIndex == 2):
+        sortField = "topic"
+        sortDirection = pymongo.ASCENDING
+    elif(sortPresetIndex == 3):
+        sortField = "dateCreation"
+        sortDirection = pymongo.ASCENDING
+    elif(sortPresetIndex == 4):
+        sortField = "dateCreation"
+        sortDirection = pymongo.DESCENDING
+    else:
+        print("sortPresetIndex " + sortPresetIndex + " NOT FOUND")
+
+    return list(qry_col_post.find(find).sort(sortField, sortDirection))
 
 def getAllPost(request):
-    return ServerResponseHandler(request, REQUEST_TYPE.GET, GetAllPost)
+    return ServerResponseHandler(request, REQUEST_TYPE.POST, GetAllPost)
 
 def PutPost(data):
     qry_col_post.insert_one({

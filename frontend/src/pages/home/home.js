@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
 import { useSharedState } from "../../shared/state-context";
-import { getAllPostAPI, getAllTopicAPI } from "../../shared/api";
+import { getAllTopicAPI } from "../../shared/api";
 import Header from "./partial/header/header";
 import PostsFilter from "./partial/filter/filter";
 import "./home.css";
@@ -10,12 +10,11 @@ import PostCardLayout from "./partial/post/post";
 
 const Home = () => {
   const navigate = useNavigate();
-  const { posts, setPosts, userAuth, setTopics } = useSharedState();
+  const { posts, userAuth, setTopics } = useSharedState();
 
   useEffect(() => {
-    getAllPostAPI(setPosts);
     getAllTopicAPI(setTopics)
-  }, [setPosts,setTopics]);
+  }, [setTopics]);
 
   const routeAddPost = () => {
     if (userAuth != null)

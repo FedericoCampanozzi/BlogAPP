@@ -14,8 +14,10 @@ const PostDetail = () => {
   const { post } = state;
   const { posts, userAuth } = useSharedState();
 
-  let p = [...posts];
-  p = p.filter((p_el) => p_el.topic === post?.topic);
+  let _posts = [...posts];
+  _posts = _posts.filter((p) => 
+    p.topic === post?.topic && p._id.$oid !== post._id.$oid
+  );
 
   const onClickDelete = () => {
     deleteAPI(post._id);
@@ -30,7 +32,7 @@ const PostDetail = () => {
               <FontAwesomeIcon icon={faChevronLeft} />
             </Button>
             {
-              userAuth.username == post?.publisher.username ? (
+              userAuth !== null && userAuth !== undefined && userAuth.username === post?.publisher.username ? (
                 <Button variant="outline-danger m-btn" onClick={onClickDelete}>
                   <FontAwesomeIcon icon={faTrash} />
                 </Button>
@@ -46,7 +48,7 @@ const PostDetail = () => {
             <PostCardLayout type={"DETAIL"} post={post} />
           </Col>
           <Col>
-            {p?.map((post, index) => {
+            {_posts?.map((post, index) => {
               return (
                 <div key={`p_${index}`}>
                   <PostCardLayout type={"RELATED"} post={post} />

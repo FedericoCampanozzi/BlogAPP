@@ -1,24 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import { useSharedState } from "../../../../shared/state-context";
 import { insertItemArray } from "../../../../shared/utility-function";
+import {
+  handleTextChangeEvent,
+  getFormattedDate,
+} from "../../../../shared/utility-function";
+import { getAllPostAPI } from "../../../../shared/api";
+import { useEffect } from "react";
 
 const PostsFilter = () => {
-  const { topics } = useSharedState();
-  let t = [...topics];
-  t = insertItemArray(t, 0, "ALL");
+  const { topics, setPosts } = useSharedState();
+  let _topics = [...topics];
+  _topics = insertItemArray(_topics, 0, "ALL");
 
-  const sortMethodChanged = () => {};
-  const filteredDataChanged = () => {};
+  const [selTopic, setSelTopic] = useState("ALL");
+  const [dateFrom, setDateFrom] = useState(getFormattedDate(new Date(2010, 0, 1)));
+  const [dateTo, setDateTo] = useState(getFormattedDate(new Date(2050, 0, 1)));
+  const [sortPresetIndex, setSortPresetIndex] = useState("1");
+
+  useEffect(() => {
+    getAllPostAPI(selTopic, dateFrom, dateTo, setPosts, sortPresetIndex);
+  }, [selTopic, dateFrom, dateTo, setPosts, sortPresetIndex]);
   return (
-    <div key={"filter_00"}>
-      <Form key={"form_00"}>
+    <div>
+      <Form>
         <Form.Label>Topics</Form.Label>
-        <Form.Select>
-          {t.map((t_el, index) => {
+        <Form.Select
+          onChange={(event) => handleTextChangeEvent(event, setSelTopic)}
+        >
+          {_topics.map((topic, index) => {
             return (
-              <option key={index} value={t_el}>
-                {t_el}
+              <option key={index} value={topic}>
+                {topic}
               </option>
             );
           })}
@@ -27,12 +41,20 @@ const PostsFilter = () => {
         <Form.Control
           type="date"
           id="dateFrom"
-          onChange={filteredDataChanged}
+          value={getFormattedDate(dateFrom)}
+          onChange={(event) => handleTextChangeEvent(event, setDateFrom)}
         />
         <Form.Label htmlFor="dateTo">To</Form.Label>
-        <Form.Control type="date" id="dateTo" onChange={filteredDataChanged} />
+        <Form.Control
+          type="date"
+          id="dateTo"
+          value={getFormattedDate(dateTo)}
+          onChange={(event) => handleTextChangeEvent(event, setDateTo)}
+        />
         <Form.Label>Sort</Form.Label>
-        <Form.Select onChange={sortMethodChanged}>
+        <Form.Select
+          onChange={(event) => handleTextChangeEvent(event, setSortPresetIndex)}
+        >
           <option value="1">Most Liked</option>
           <option value="2">Category</option>
           <option value="3">Newer</option>

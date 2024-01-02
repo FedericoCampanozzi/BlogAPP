@@ -9,9 +9,14 @@ function errorFlow(func) {
 }
 
 /* POST */
-const getAllPostAPI = async (setPosts) => {
+const getAllPostAPI = async (selTopic, dateFrom, dateTo, setPosts, sortPresetIndex) => {
   errorFlow(async () => {
-    const response = await axios.get("/api/v1/post/get-all");
+    const response = await axios.post("/api/v1/post/get-all",{
+      "selTopic" : selTopic,
+      "dateFrom" : dateFrom,
+      "dateTo" : dateTo,
+      "sortPresetIndex" : sortPresetIndex
+    });
     const posts = [...response.data['data']];
     setPosts(posts);
   });
