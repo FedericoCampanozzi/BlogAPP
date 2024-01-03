@@ -8,7 +8,11 @@ const insertItemArray = (arr, index, ...newItems) => [
 ];
 
 const getFormattedDate = (date) => {
+  try{
     return new Date(date).toISOString().split("T")[0];
+  } catch {
+    return new Date().toISOString().split("T")[0];
+  }
 };
 
 const handleTextChangeEvent = (event, setMethod) => {

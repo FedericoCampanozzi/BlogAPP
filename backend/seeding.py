@@ -4,16 +4,10 @@ import random
 from datetime import datetime
 from app.views import GetAllTopic
 
-def getDateJsonObeject(date):
-    formatted_date = date.strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
-    jsonDate = {"$date": formatted_date}
-    return jsonDate
-
 def insertUser(fake, allImageProfile):
     user = {
         "name" : fake.first_name(),
         "surname" : fake.last_name(),
-        "dateOfBirthday" : getDateJsonObeject(fake.past_datetime('-21900d')),
         "username": fake.user_name(),
         "imageProfileURL" : fake.random_element(allImageProfile),
         "email": fake.email(),
@@ -25,7 +19,7 @@ def insertUser(fake, allImageProfile):
 def insertPost(fake, allUser, allTopic):
     qry_col_post.insert_one({
         "title" : fake.sentence(nb_words=4),
-        "dateCreation" : getDateJsonObeject(fake.past_datetime('-3650d')),
+        "dateCreation" : datetime.combine(fake.past_date('-3650d'), datetime.min.time()),
         "summary": fake.sentence(),
         "text" : fake.paragraph(),
         "publisher": fake.random_element(allUser),

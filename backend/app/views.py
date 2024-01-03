@@ -2,18 +2,27 @@ import random
 import pymongo
 from .models import *
 from .utils import ServerResponseHandler, REQUEST_TYPE
-from datetime import datetime
+from datetime import datetime, date
 from bson.objectid import ObjectId
 
 # POST #
 def GetAllPost(data):
     date_format= "%Y-%m-%d"
+    try:
+        dLower = datetime.strptime(data['dateFrom'], date_format).date()
+    except:
+        dLower = datetime.min
+    try:
+        dUpper = datetime.strptime(data['dateTo'], date_format).date()
+    except:
+        dUpper = datetime.max
+        
     sortPresetIndex = int(data['sortPresetIndex'])
     sortField = ""
     sortDirection = pymongo.ASCENDING
-    dLower = datetime.strptime(data['dateFrom'], date_format)
-    dUpper = datetime.strptime(data['dateTo'], date_format)
     find = {}
+    dLower = datetime.combine(dLower, datetime.min.time())
+    dUpper = datetime.combine(dUpper, datetime.min.time())
 
     if (data['selTopic'] == "ALL"):
         find = {"dateCreation" : {"$gte": dLower, "$lte": dUpper}}
@@ -37,7 +46,7 @@ def GetAllPost(data):
         sortDirection = pymongo.ASCENDING
     else:
         print("sortPresetIndex " + sortPresetIndex + " NOT FOUND")
-
+    
     return list(qry_col_post.find(find).sort(sortField, sortDirection))
 
 def getAllPost(request):
@@ -74,7 +83,6 @@ def PutUser(data):
     qry_col_user.insert_one({
       "name" : data['name'],
       "surname" : data['surname'],
-      "dateOfBirthday" : data['dateOfBirthday'],
       "username": data['username'],
       "imageProfileURL" : url,
       "email": data['email'],

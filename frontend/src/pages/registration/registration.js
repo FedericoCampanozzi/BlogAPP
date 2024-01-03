@@ -1,18 +1,15 @@
 import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
-import { useSharedState } from "../../shared/state-context";
-import { loginAPI, putUserAPI } from "../../shared/api";
-import {  handleTextChangeEvent, getFormattedDate } from "../../shared/utility-function";
-import "./registration.css";
+import { putUserAPI } from "../../shared/api";
+import {  handleTextChangeEvent } from "../../shared/utility-function";
 import { useNavigate } from "react-router-dom";
+import "./registration.css";
 
 const Registration = () => {
-  const { setUserAuth } = useSharedState();
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
-  const [dateOfBirthday, setDateOfBirthday] = useState(new Date());
   const [username, setUsername] = useState("");
   const [imageProfileUrl, setImageProfileUrl] = useState("");
   const [email, setEmail] = useState("");
@@ -24,16 +21,12 @@ const Registration = () => {
       putUserAPI(
         name,
         surname,
-        dateOfBirthday,
         username,
         imageProfileUrl,
         email,
         password
       );
-      // TO FIX :
-      // loginAPI retun null => have to log user
-      loginAPI(username, password, setUserAuth);
-      navigate("/");
+      navigate("/login");
     } else {
       console.error("passwords must be equal");
     }
@@ -61,18 +54,6 @@ const Registration = () => {
             placeholder="Surname"
             value={surname}
             onChange={(event) => handleTextChangeEvent(event, setSurname)}
-          />
-        </div>
-        <div className="py-2">
-          <Form.Label>Date of Birthday</Form.Label>
-          <Form.Control
-            id="dt_dof"
-            type="date"
-            placeholder="Date of Birthday"
-            value={getFormattedDate(dateOfBirthday)}
-            onChange={(event) =>
-              handleTextChangeEvent(event, setDateOfBirthday)
-            }
           />
         </div>
         <div className="py-2">

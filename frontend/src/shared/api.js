@@ -61,7 +61,6 @@ const loginAPI = async (username, password, setUserAuth) => {
 const putUserAPI = async (
   name,
   surname,
-  dateOfBirthday,
   username,
   imageProfileUrl,
   email,
@@ -71,7 +70,6 @@ const putUserAPI = async (
     await axios.post("/api/v1/user/put", {
       "name" : name,
       "surname" : surname,
-      "dateOfBirthday" : dateOfBirthday,
       "username": username,
       "url": imageProfileUrl,
       "email": email,
