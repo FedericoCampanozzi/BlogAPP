@@ -31,10 +31,10 @@ def GetAllPost(data):
         sortDirection = pymongo.ASCENDING
     elif(sortPresetIndex == 3):
         sortField = "dateCreation"
-        sortDirection = pymongo.ASCENDING
+        sortDirection = pymongo.DESCENDING
     elif(sortPresetIndex == 4):
         sortField = "dateCreation"
-        sortDirection = pymongo.DESCENDING
+        sortDirection = pymongo.ASCENDING
     else:
         print("sortPresetIndex " + sortPresetIndex + " NOT FOUND")
 
@@ -104,3 +104,10 @@ def GetAllTopic(data):
 
 def getAllTopic(request):
     return ServerResponseHandler(request, REQUEST_TYPE.GET, GetAllTopic)
+
+# EXTERNAL CALL #
+def GetTextFromChatGPT(data):
+    return "TEXT-FROM-CHAT-GPT"
+
+def getTextFromChatGPT(request):
+    return ServerResponseHandler(request, REQUEST_TYPE.GET, GetTextFromChatGPT)
