@@ -15,8 +15,8 @@ const PostsFilter = () => {
   _topics = insertItemArray(_topics, 0, "ALL");
 
   const [selTopic, setSelTopic] = useState("ALL");
-  const [dateFrom, setDateFrom] = useState(getFormattedDate(new Date(2010, 0, 1)));
-  const [dateTo, setDateTo] = useState(getFormattedDate(new Date(2050, 0, 1)));
+  const [dateFrom, setDateFrom] = useState(getFormattedDate((new Date().getDate() - 3650)));
+  const [dateTo, setDateTo] = useState(getFormattedDate(new Date()));
   const [sortPresetIndex, setSortPresetIndex] = useState("1");
 
   useEffect(() => {
