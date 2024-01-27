@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
-import { putUserAPI } from "../../shared/api";
+import { loginAPI, putUserAPI } from "../../shared/api";
 import {  handleTextChangeEvent } from "../../shared/utility-function";
 import { useNavigate } from "react-router-dom";
+import { useSharedState } from "../../shared/state-context";
 import "./registration.css";
 
 const Registration = () => {
@@ -15,6 +16,7 @@ const Registration = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
+  const { setUserAuth } = useSharedState();
 
   const registerFunction = () => {
     if (password === passwordConfirm) {
@@ -26,12 +28,10 @@ const Registration = () => {
         email,
         password
       );
-      const fromAddPost = false;
-      navigate("/login", {
-        state: {
-          fromAddPost
-        }
-      });
+      setTimeout(() => {
+        loginAPI(username, password, setUserAuth);
+        navigate("/");
+      }, 1000);
     } else {
       console.error("passwords must be equal");
     }
