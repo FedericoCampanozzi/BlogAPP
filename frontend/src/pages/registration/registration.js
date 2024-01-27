@@ -26,7 +26,12 @@ const Registration = () => {
         email,
         password
       );
-      navigate("/login");
+      const fromAddPost = false;
+      navigate("/login", {
+        state: {
+          fromAddPost
+        }
+      });
     } else {
       console.error("passwords must be equal");
     }

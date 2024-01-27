@@ -10,20 +10,20 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.6.3",
+    "bootstrap": "^5.2.3",
     "font-awesome": "^4.7.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.2",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.21.1",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4",
-    "bootstrap": "^5.2.3"
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev-mongo": "cross-env REACT_APP_DB=MONGO react-scripts start",
+    "dev-sql": "cross-env REACT_APP_DB=SQL react-scripts start",
+    "build-mongo": "cross-env REACT_APP_DB=MONGO react-scripts build",
+    "build-sql": "cross-env REACT_APP_DB=SQL react-scripts build"
   },
   "eslintConfig": {
     "extends": [
@@ -42,5 +42,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
   }
 }

@@ -5,8 +5,8 @@ import { useSharedState } from "../../shared/state-context";
 import { getAllTopicAPI } from "../../shared/api";
 import Header from "./partial/header/header";
 import PostsFilter from "./partial/filter/filter";
+import PostCard from "./partial/post/post-card";
 import "./home.css";
-import PostCardLayout from "./partial/post/post";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -37,7 +37,7 @@ const Home = () => {
           {posts?.map((post, index) => {
             return (
               <div key={`p_${index}`}>
-                <PostCardLayout type={"POST"} post={post} />
+                <PostCard type={"POST"} post={post} />
               </div>
             );
           })}

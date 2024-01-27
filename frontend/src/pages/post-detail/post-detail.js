@@ -4,23 +4,31 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "react-bootstrap";
 import { useSharedState } from "../../shared/state-context";
-import PostCardLayout from "../home/partial/post/post";
+import PostCard from "../home/partial/post/post-card";
 import { Col, Container, Row } from "react-bootstrap";
 import { deleteAPI } from "../../shared/api";
+import './post-detail.css'
 
 const PostDetail = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const { post } = state;
   const { posts, userAuth } = useSharedState();
-
   let _posts = [...posts];
-  _posts = _posts.filter((p) => 
-    p.topic === post?.topic && p._id.$oid !== post._id.$oid
+  let posts_related = _posts.filter((p) => 
+    (process.env.REACT_APP_DB === "MONGO" && p.topic === post?.topic && p._id.$oid !== post._id.$oid) ||
+    (process.env.REACT_APP_DB === "SQL" && p.topic__name === post?.topic__name && p.id !== post.id)
   );
-
+  let isMyPost = userAuth !== null && userAuth !== undefined && (
+    (process.env.REACT_APP_DB === "MONGO" && userAuth.username === post?.publisher.username) ||
+    (process.env.REACT_APP_DB === "SQL" && userAuth.id === post?.pid));
   const onClickDelete = () => {
-    deleteAPI(post._id);
+    if(process.env.REACT_APP_DB === "MONGO")
+      deleteAPI(post._id);
+    else if(process.env.REACT_APP_DB === "SQL")
+      deleteAPI(post.id);
+    else
+      console.error("process.env.REACT_APP_DB DON'T SET")
     navigate("/");
   };
   return (
@@ -32,7 +40,7 @@ const PostDetail = () => {
               <FontAwesomeIcon icon={faChevronLeft} />
             </Button>
             {
-              userAuth !== null && userAuth !== undefined && userAuth.username === post?.publisher.username ? (
+              userAuth !== null && userAuth !== undefined && isMyPost ? (
                 <Button variant="outline-danger m-btn" onClick={onClickDelete}>
                   <FontAwesomeIcon icon={faTrash} />
                 </Button>
@@ -45,16 +53,18 @@ const PostDetail = () => {
         </Row>
         <Row>
           <Col sm={8}>
-            <PostCardLayout type={"DETAIL"} post={post} />
+            <PostCard type={"DETAIL"} post={post} />
           </Col>
           <Col>
-            {_posts?.map((post, index) => {
-              return (
-                <div key={`p_${index}`}>
-                  <PostCardLayout type={"RELATED"} post={post} />
-                </div>
-              );
-            })}
+            <div className="post-related-container">
+              {posts_related?.map((post, index) => {
+                return (
+                  <div key={`p_${index}`}>
+                    <PostCard type={"RELATED"} post={post} />
+                  </div>
+                );
+              })}
+            </div>
           </Col>
         </Row>
       </Container>
