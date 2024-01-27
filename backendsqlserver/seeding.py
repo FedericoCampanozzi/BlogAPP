@@ -11,6 +11,7 @@ from faker import Faker
 from app.models import *
 import random
 from datetime import datetime
+from django.utils import timezone
 
 def insertTopic(topic_name):
     topic = Topic(name=topic_name)
@@ -31,9 +32,11 @@ def insertUser(fake, allImageProfile):
     return user
 
 def insertPost(fake, allUser, allTopic):
+    randomDatetime = datetime.combine(fake.past_date('-3650d'), datetime.min.time())
+
     Post(
         title = fake.sentence(nb_words=3),
-        dateCreation = datetime.combine(fake.past_date('-3650d'), datetime.min.time()),
+        dateCreation = timezone.make_aware(randomDatetime),
         summary = fake.sentence(),
         text = fake.paragraph(),
         publisher = fake.random_element(allUser),
