@@ -1,55 +1,68 @@
 import random
 from .models import *
 from .utils import ServerResponseHandler, REQUEST_TYPE
-from datetime import datetime
+from datetime import datetime, timedelta
+from django.db.models import Q, F
 
 # POST #
 def GetAllPost(data):
-    #date_format= "%Y-%m-%d"
+    date_format= "%Y-%m-%d"
 
-    #try:
-    #    dLower = datetime.strptime(data['dateFrom'], date_format).date()
-    #except:
-    #    dLower = datetime.min
-    #try:
-    #    dUpper = datetime.strptime(data['dateTo'], date_format).date()
-    #except:
-    #    dUpper = datetime.max
-        
-    #sortPresetIndex = int(data['sortPresetIndex'])
-    #sortField = ""
-    #sortDirection = pymongo.ASCENDING
-    #find = {}
-    #dLower = datetime.combine(dLower, datetime.min.time())
-    #dUpper = datetime.combine(dUpper, datetime.min.time())
+    try:
+        dLower = datetime.strptime(data['dateFrom'], date_format).date()
+    except:
+        dLower = datetime.min
+    try:
+        dUpper = datetime.strptime(data['dateTo'], date_format).date()
+    except:
+        dUpper = datetime.max
 
-    #if (data['selTopic'] == "ALL"):
-    #    find = {"dateCreation" : {"$gte": dLower, "$lte": dUpper}}
-    #else :
-    #    find = {
-    #        "dateCreation" : {"$gte": dLower, "$lte": dUpper},
-    #        "topic" : data['selTopic']
-    #    }
-
-    #if(sortPresetIndex == 1):
-    #    sortField = "likes"
-    #    sortDirection = pymongo.DESCENDING
-    #elif(sortPresetIndex == 2):
-    #    sortField = "topic"
-    #    sortDirection = pymongo.ASCENDING
-    #elif(sortPresetIndex == 3):
-    #    sortField = "dateCreation"
-    #    sortDirection = pymongo.DESCENDING
-    #elif(sortPresetIndex == 4):
-    #    sortField = "dateCreation"
-    #    sortDirection = pymongo.ASCENDING
-    #else:
-    #    print("sortPresetIndex " + sortPresetIndex + " NOT FOUND")
+    sortPresetIndex = int(data['sortPresetIndex'])
+    sortField = ""
+    sortDirection = ""
+    filter = None
+    dLower = datetime.combine(dLower, datetime.min.time()) + timedelta(days=-1)
+    dUpper = datetime.combine(dUpper, datetime.min.time()) + timedelta(days=1)
     
-    #return list(qry_col_post.find(find).sort(sortField, sortDirection))
+    if (data['selTopic'] == "ALL"):
+        filter = Q(dateCreation__gte=dLower) & Q(dateCreation__lte=dUpper)
+    else :
+        filter = Q(dateCreation__gte=dLower) & Q(dateCreation__lte=dUpper) & Q(topic__name=data['selTopic'])
 
-    #return list(Post.objects.all().values())
-    return Post.objects.all()
+    if(sortPresetIndex == 1):
+        sortField = "likes"
+        sortDirection = "-"
+    elif(sortPresetIndex == 2):
+        sortField = "topic"
+        sortDirection = ""
+    elif(sortPresetIndex == 3):
+        sortField = "dateCreation"
+        sortDirection = "-"
+    elif(sortPresetIndex == 4):
+        sortField = "dateCreation"
+        sortDirection = ""
+    else:
+        print("sortPresetIndex " + sortPresetIndex + " NOT FOUND")
+
+    return list(
+            Post.objects
+                .filter(filter)
+                .order_by(sortDirection + sortField)
+                .select_related('publisher','topic')
+                .values(
+                    'id',
+                    'title', 
+                    'dateCreation', 
+                    'summary',
+                    'likes',
+                    'topic__name',
+                    'text',
+                    pid=F('publisher__id'),
+                    name=F('publisher__name'),
+                    surname=F('publisher__surname'),
+                    imageProfileURL=F('publisher__imageProfileURL')
+                )
+        )
 
 def getAllPost(request):
     return ServerResponseHandler(request, REQUEST_TYPE.POST, GetAllPost)
@@ -60,8 +73,8 @@ def PutPost(data):
       dateCreation = datetime.now(),
       summary = data['summary'],
       text = data['text'],
-      publisher = data['publisher'],
-      topic = data['topic'],
+      publisher_id = int(data['publisher']['id']),
+      topic_id = Topic.objects.filter(name=data['topic']).values()[0]['id'],
       likes = random.randint(1000, 10000)
     ).save()
     return None
@@ -70,7 +83,7 @@ def putPost(request):
     return ServerResponseHandler(request, REQUEST_TYPE.POST, PutPost)
 
 def DeletePost(data):
-    Post.objects.get(id=data['id']['$oid']).delete()
+    Post.objects.get(id=data['id']).delete()
     return None
 
 def deletePost(request):
@@ -85,6 +98,7 @@ def PutUser(data):
       name = data['name'],
       surname = data['surname'],
       username = data['username'],
+      dateOfBirthday = datetime.now(),
       imageProfileURL = url,
       email = data['email'],
       password = data['password']
@@ -95,7 +109,7 @@ def putUser(request):
     return ServerResponseHandler(request, REQUEST_TYPE.POST, PutUser)
 
 def Login(data):
-    users = User.objects.get(username=data['username'], password=data['password'])
+    users = list(User.objects.filter(Q(username=data['username']) & Q(password=data['password'])).values())
     print("users=",users)
     if(len(users) != 1): return None
     else: return users[0]
@@ -105,8 +119,10 @@ def login(request):
 
 # TOPIC #
 def GetAllTopic(data):
-    #return list(Topic.objects.all().values())
-    return Topic.objects.all()
+    l = list()
+    for t_name in Topic.objects.all().values():
+        l.append(t_name["name"])
+    return l
 
 def getAllTopic(request):
     return ServerResponseHandler(request, REQUEST_TYPE.GET, GetAllTopic)

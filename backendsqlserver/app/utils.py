@@ -1,20 +1,11 @@
 from django.http import JsonResponse
-from django.core.serializers import serialize
 from enum import Enum
+from bson.json_util import dumps, loads
 import json
 import logging
 from datetime import date
 
-def get_json_from_queryset(data):
-    """Trasformo data in un json"""
-    # Converti il queryset in una lista di dizionari
-    list_of_values = json.loads(serialize('json', data))
-    # Serializza la lista in formato JSON con la funzione di conversione personalizzata
-    json_data = json.dumps(list_of_values, default=date_handler)
-    return json_data
-
-
-def date_handler(obj):
+def convert_to_json(obj):
     """Funzione di conversione personalizzata per gestire le date."""
     if isinstance(obj, date):
         return obj.isoformat()
@@ -47,7 +38,7 @@ def ServerResponseHandler(
             data = body_function(json.loads(body))
             response = {
                 "error": False,
-                "data": get_json_from_queryset(data),
+                "data": json.loads(dumps(data,  default=convert_to_json)),
                 "message": OKMessage
             }
             logger.info(response)
