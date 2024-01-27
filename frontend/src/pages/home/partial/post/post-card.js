@@ -4,8 +4,9 @@ import { getFormattedDate } from "../../../../shared/utility-function";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { Link, useNavigate } from "react-router-dom";
-import './post-card.css';
+import { useNavigate } from "react-router-dom";
+//import { Link, useNavigate } from "react-router-dom";
+import "./post-card.css";
 /*
   1-POST = Post nella home page
   2-DETAIL = Post nel dettaglio nella route /post-detail
@@ -19,71 +20,106 @@ const PostCard = ({ post, type }) => {
         post,
       },
     });
-  }
+  };
   return (
     <>
       <Card className="card-container">
         <Card.Body>
           <Container>
             <Row>
-              {
-                (type === "POST" || type === "DETAIL")?(
-                  <>
-                    <Col>{post?.title}</Col>
-                    <Col>
-                      <div
-                        className="image-profile"
-                        style={{
-                          backgroundImage: `url("${post?.publisher?.imageProfileURL || post?.imageProfileURL}")`,
-                        }}
-                      ></div>
-                    </Col>
-                  </>
-                ):(
-                  <Col>{post?.title}</Col>
-                )
-              }
-              <Col>{post?.publisher?.name || post?.name}</Col>
-              <Col>{post?.publisher?.surname || post?.surname}</Col>
-            </Row>
-            <Row>
-              <Col>
-                <span className="post-data">
-                  {getFormattedDate(post?.dateCreation?.$date || post?.dateCreation)}
-                </span>
-              </Col>
-              <Col></Col>
-              <Col>@{post?.topic || post?.topic__name}</Col>
-            </Row>
-            <Row>
-              <Col>
-              {
-                (type === "DETAIL")?(
-                  <p>
-                    {post?.text}
-                  </p>
-                ):(
-                  <p>
-                    {post?.summary}
-                  </p>
-                )
-              }
-              </Col>
-              <Col>
-                <FontAwesomeIcon icon={faHeart} /> <span>{post?.likes}</span>
+              <Col aria-colspan={3}>
+                {type === "RELATED" ? <>{post?.title}</> : <>{post?.title}</>}
               </Col>
             </Row>
+            <br />
+            {type === "RELATED" ? (
+              <>
+                <Row>
+                  <Col aria-colspan={3}>
+                    Posted:&nbsp;
+                    <span className="post-data">
+                      {getFormattedDate(
+                        post?.dateCreation?.$date || post?.dateCreation
+                      )}
+                    </span>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col aria-colspan={3}>
+                    Topic: {post?.topic || post?.topic__name}
+                  </Col>
+                </Row>
+                <Row>
+                  <Col aria-colspan={3}>
+                    <FontAwesomeIcon icon={faHeart} /> <span>{post?.likes}</span>
+                  </Col>
+                </Row>
+              </>
+            ) : (
+              <Row>
+                <Col sm={6}>
+                  Posted:&nbsp;
+                  <span className="post-data">
+                    {getFormattedDate(
+                      post?.dateCreation?.$date || post?.dateCreation
+                    )}
+                  </span>
+                </Col>
+                <Col sm={3}>Topic: {post?.topic || post?.topic__name}</Col>
+                <Col sm={3}>
+                  <FontAwesomeIcon icon={faHeart} /> <span>{post?.likes}</span>
+                </Col>
+              </Row>
+            )}
             <Row>
-              <Col>
-              {
-                (type === "POST" || type === "RELATED")?(
+              <Col aria-colspan={3}>
+                <br />
+                {type === "DETAIL" ? (
+                  <p>{post?.text}</p>
+                ) : (
+                  <p>{post?.summary}</p>
+                )}
+              </Col>
+            </Row>
+            <Row>
+              {type === "POST" ? (
+                <>
+                  <Col>
+                    <Button variant="outline-dark" onClick={goToDetail}>
+                      Detail
+                    </Button>
+                  </Col>
+                  <Col aria-colspan={2}>
+                    <div
+                      className="image-profile"
+                      style={{
+                        backgroundImage: `url("${
+                          post?.publisher?.imageProfileURL ||
+                          post?.imageProfileURL
+                        }")`,
+                      }}
+                    ></div>
+                    &nbsp;
+                    {post?.publisher?.username || post?.username}
+                  </Col>
+                </>
+              ) : null}
+              {type === "RELATED" ? (
+                <>
                   <Button variant="outline-dark" onClick={goToDetail}>
                     Detail
                   </Button>
-                ):null
-              }
-              </Col>
+                </>
+              ) : null}
+              {type === "DETAIL" ? (
+                <Col aria-colspan={3}>
+                  Author:&nbsp;
+                  {post?.publisher?.name || post?.name}&nbsp;
+                  {post?.publisher?.surname || post?.surname}
+                </Col>
+              ) : null}
             </Row>
+            <br />
           </Container>
         </Card.Body>
       </Card>

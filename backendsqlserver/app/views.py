@@ -60,7 +60,8 @@ def GetAllPost(data):
                     pid=F('publisher__id'),
                     name=F('publisher__name'),
                     surname=F('publisher__surname'),
-                    imageProfileURL=F('publisher__imageProfileURL')
+                    imageProfileURL=F('publisher__imageProfileURL'),
+                    username=F('publisher__username')
                 )
         )
 
